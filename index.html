@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dicky News | Auto Shorten Premium</title>
+    <title>Dicky News | Premium Link Unlocker</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
-        :root { --bg: #050505; --card: #121214; --yellow: #ffcc00; --yellow-glow: rgba(255, 204, 0, 0.4); --text: #e2e8f0; }
+        :root { --bg: #050505; --card: #121214; --yellow: #ffcc00; --text: #e2e8f0; }
         * { box-sizing: border-box; cursor: none; }
         body {
             margin: 0; background-color: var(--bg); color: var(--text);
             font-family: 'Segoe UI', sans-serif; height: 100vh; width: 100vw;
             overflow: hidden; display: flex; align-items: center; justify-content: center;
         }
-        .wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 480px; z-index: 100; perspective: 1000px; }
-        .box { background: var(--card); padding: 40px; border-radius: 28px; border: 1px solid #222; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.8); width: 100%; transition: transform 0.1s ease-out; }
-        #cursor { width: 20px; height: 20px; background: var(--yellow); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transform: translate(-50%, -50%); }
+        /* Kunci Posisi di Tengah */
+        .wrapper { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 450px; z-index: 100; perspective: 1000px; }
+        .box { background: var(--card); padding: 35px; border-radius: 28px; border: 1px solid #222; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.8); width: 100%; transition: transform 0.1s; }
+        #cursor { width: 18px; height: 18px; background: var(--yellow); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transform: translate(-50%, -50%); }
         .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 204, 0, 0.1) 0%, transparent 60%); z-index: -1; }
-        h2 { font-size: 26px; font-weight: 900; margin-bottom: 10px; background: linear-gradient(to bottom, #fff, var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .instruction { color: #888; font-size: 14px; margin-bottom: 25px; display: block; }
-        input { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 14px; border: 1px solid #333; background: #0a0a0b; color: #fff; text-align: center; outline: none; }
-        button { width: 100%; padding: 16px; border: none; border-radius: 16px; font-size: 14px; font-weight: 800; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+        h2 { font-size: 24px; font-weight: 900; margin-bottom: 8px; background: linear-gradient(to bottom, #fff, var(--yellow)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .instruction { color: #888; font-size: 13px; margin-bottom: 20px; display: block; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #333; background: #000; color: #fff; text-align: center; outline: none; }
+        button { width: 100%; padding: 16px; border: none; border-radius: 14px; font-size: 14px; font-weight: 800; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; }
         .btn-primary { background: var(--yellow); color: #000; text-transform: uppercase; }
         .btn-task { background: #1a1a1d; color: #fff; border: 1px solid #333; }
-        .btn-done { opacity: 0.3 !important; background: #000 !important; color: #666 !important; }
-        .loading { font-size: 12px; color: var(--yellow); animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .btn-done { opacity: 0.2 !important; background: #000 !important; color: #444 !important; }
         @media (max-width: 600px) { #cursor { display: none; } * { cursor: auto !important; } .box { padding: 30px 20px; } }
     </style>
 </head>
@@ -41,13 +40,13 @@
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
-// DAFTAR TUGAS SOSMED
+// DAFTAR TUGAS TETAP
 const mySocials = [
     { n: "Subscribe YouTube Utama", i: "fab fa-youtube", l: "https://youtube.com/@dickynews" },
     { n: "Subscribe YouTube Kedua", i: "fab fa-youtube", l: "https://youtube.com/@dickynewsofficial" },
     { n: "Like & Komen Video", i: "fas fa-heart", l: "https://youtu.be/pn-l2l36qEE" },
     { n: "Follow Instagram", i: "fab fa-instagram", l: "https://www.instagram.com/dickynews" },
-    { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt" },
+    { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt_" },
     { n: "Follow Facebook", i: "fab fa-facebook", l: "https://www.facebook.com/dickynews45" }
 ];
 
@@ -55,7 +54,7 @@ AOS.init({ duration: 800 });
 const params = new URLSearchParams(window.location.search);
 const app = document.getElementById("app");
 
-// Mouse Tracking
+// Mouse Tracking & Tilt
 document.addEventListener('mousemove', e => {
     const cur = document.getElementById('cursor');
     if(cur) { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; }
@@ -63,64 +62,45 @@ document.addEventListener('mousemove', e => {
     document.documentElement.style.setProperty('--my', (e.clientY/window.innerHeight)*100 + "%");
     const x = e.clientX - window.innerWidth/2; const y = e.clientY - window.innerHeight/2;
     const box = document.querySelector('.box');
-    if(box) box.style.transform = `rotateX(${-y/70}deg) rotateY(${x/70}deg)`;
+    if(box) box.style.transform = `rotateX(${-y/80}deg) rotateY(${x/80}deg)`;
 });
 
-// MODE GENERATOR
+// TAMPILAN GENERATOR
 if(!params.get("v")){
     app.innerHTML = `
-        <i class="fas fa-magic" style="color:var(--yellow); font-size:40px; margin-bottom:15px;"></i>
-        <h2>Auto Short Link</h2>
+        <i class="fas fa-link" style="color:var(--yellow); font-size:35px; margin-bottom:12px;"></i>
+        <h2>Auto Generator</h2>
         <span class="instruction">Tempel link Mediafire/Drive kamu</span>
         <input id="inp" placeholder="https://www.mediafire.com/file/...">
-        <button id="btnGen" class="btn-primary" onclick="buat()">PROSES & PENDEKKAN</button>
+        <button class="btn-primary" onclick="buat()">PROSES LINK</button>
         <div id="res"></div>
     `;
 
-    window.buat = async function(){
+    window.buat = function(){
         const val = document.getElementById("inp").value.trim();
-        const btn = document.getElementById("btnGen");
-        if(!val) return alert("Tempel linknya bos!");
-
-        btn.disabled = true;
-        btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> MENGHUBUNGI SERVER...`;
-
-        // 1. Encoded Link (Data Asli)
-        const encoded = btoa(val).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        const longLink = window.location.origin + window.location.pathname + "?v=" + encoded;
-
-        // 2. Tembak API TinyURL (Gratis & Tanpa Iklan)
-        try {
-            const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(longLink)}`);
-            const shortLink = await response.text();
-
-            document.getElementById("res").innerHTML = `
-                <div style="margin-top:20px; border:1px dashed var(--yellow); padding:15px; border-radius:15px; animation: slideUp 0.5s ease;">
-                    <p style="font-size:12px; color:var(--yellow); margin-bottom:8px;">Link Super Pendek Permanen:</p>
-                    <input readonly value="${shortLink}" onclick="this.select(); document.execCommand('copy'); alert('Tersalin!');" style="background:#000; border-color:var(--yellow); cursor:pointer;">
-                    <p style="font-size:10px; color:#666; margin-top:5px;">Link ini aman, tanpa iklan, dan permanen.</p>
-                </div>`;
-        } catch (error) {
-            alert("Gagal memanggil server TinyURL. Gunakan link manual.");
-            console.error(error);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = `PROSES & PENDEKKAN`;
-        }
+        if(!val) return alert("Tempel linknya!");
+        // Enkripsi Bersih (Permanen & No Ads)
+        const clean = btoa(val).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+        const final = window.location.origin + window.location.pathname + "?v=" + clean;
+        document.getElementById("res").innerHTML = `
+            <div style="margin-top:15px; border:1px dashed #444; padding:12px; border-radius:12px;">
+                <p style="font-size:11px; color:var(--yellow); margin-bottom:5px;">Link Siap (Salin & Share):</p>
+                <input readonly value="${final}" onclick="this.select(); document.execCommand('copy'); alert('Tersalin!');" style="background:#000; font-size:11px; border-color:var(--yellow);">
+            </div>`;
     };
 } 
-// MODE UNLOCK
+// TAMPILAN UNLOCK
 else {
     let target;
     try {
-        let base64 = params.get("v").replace(/-/g, '+').replace(/_/g, '/');
-        target = atob(base64);
+        let b64 = params.get("v").replace(/-/g, '+').replace(/_/g, '/');
+        target = atob(b64);
     } catch(e) { target = "https://dickynews.github.io/home"; }
 
     app.innerHTML = `
-        <i class="fas fa-lock" style="color:var(--yellow); font-size:40px; margin-bottom:15px;"></i>
+        <i class="fas fa-lock" style="color:var(--yellow); font-size:35px; margin-bottom:12px;"></i>
         <h2>Unlock Your Link</h2>
-        <span class="instruction">Selesaikan langkah di bawah untuk membuka link 👇</span>
+        <span class="instruction">Selesaikan langkah di bawah 👇</span>
         <div id="tasks"></div>
         <div id="final"></div>
     `;
@@ -133,10 +113,10 @@ else {
         b.onclick = () => {
             window.open(s.l, "_blank");
             if(!b.classList.contains("btn-done")){
-                b.classList.add("btn-done"); b.innerHTML = `✅ Selesai`;
+                b.classList.add("btn-done"); b.innerHTML = `SELESAI`;
                 done++;
                 if(done >= mySocials.length) {
-                    document.getElementById('final').innerHTML = `<button class="btn-primary" style="background:#22c55e; color:#fff; margin-top:20px;" onclick="window.location.href='${target}'">DOWNLOAD SEKARANG</button>`;
+                    document.getElementById('final').innerHTML = `<button class="btn-primary" style="background:#22c55e; color:#fff; margin-top:15px;" onclick="window.location.href='${target}'"><i class="fas fa-download"></i> DOWNLOAD FILE</button>`;
                 }
             }
         };

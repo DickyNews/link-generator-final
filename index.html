@@ -30,7 +30,6 @@
             justify-content: center;
         }
 
-        /* PERBAIKAN TOTAL: Memaksa posisi tepat di tengah */
         .wrapper {
             position: fixed;
             top: 50%;
@@ -50,7 +49,7 @@
             text-align: center;
             box-shadow: 0 25px 50px rgba(0,0,0,0.8);
             width: 100%;
-            transition: transform 0.1s ease-out; /* Untuk efek tilt halus */
+            transition: transform 0.1s ease-out;
         }
 
         #cursor {
@@ -106,7 +105,7 @@
             border-radius: 16px;
             font-size: 14px;
             font-weight: 800;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -115,17 +114,10 @@
         }
 
         .btn-primary { background: var(--yellow); color: #000; text-transform: uppercase; }
-        .btn-primary:hover { transform: scale(1.03); box-shadow: 0 0 20px var(--yellow-glow); }
-
         .btn-task { background: #1a1a1d; color: #fff; border: 1px solid #333; }
-        .btn-task:hover { border-color: var(--yellow); background: #222; }
-        .btn-done { opacity: 0.3 !important; background: #000 !important; border-color: #222 !important; color: #666 !important; cursor: not-allowed; }
+        .btn-done { opacity: 0.3 !important; background: #000 !important; border-color: #222 !important; color: #666 !important; }
 
-        @media (max-width: 600px) { 
-            #cursor { display: none; } 
-            * { cursor: auto !important; }
-            .box { padding: 30px 20px; }
-        }
+        @media (max-width: 600px) { #cursor { display: none; } * { cursor: auto !important; } }
     </style>
 </head>
 <body>
@@ -134,16 +126,16 @@
 <div class="bg-glow"></div>
 
 <div class="wrapper">
-    <div class="box" id="app" data-aos="zoom-in">
-        </div>
+    <div class="box" id="app" data-aos="zoom-in"></div>
 </div>
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
+// --- KONFIGURASI SOSMED (LINK SUDAH DIPERBAIKI) ---
 const mySocials = [
     { n: "Subscribe YouTube Utama", i: "fab fa-youtube", l: "https://youtube.com/@dickynews" },
     { n: "Subscribe YouTube Kedua", i: "fab fa-youtube", l: "https://youtube.com/@dickynewsofficial" },
-    { n: "Like & Komen Video", i: "fas fa-heart", l: "https://youtu.be/pn-l2I36qEE" },
+    { n: "Like & Komen Video", i: "fas fa-heart", l: "https://youtu.be/pn-l2l36qEE" },
     { n: "Follow Instagram", i: "fab fa-instagram", l: "https://www.instagram.com/dickynews" },
     { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt_" },
     { n: "Follow Facebook", i: "fab fa-facebook", l: "https://www.facebook.com/dickynews45" }
@@ -153,48 +145,37 @@ AOS.init({ duration: 800 });
 const params = new URLSearchParams(window.location.search);
 const app = document.getElementById("app");
 
-// Mouse Tracking & Tilt
 document.addEventListener('mousemove', e => {
     const cur = document.getElementById('cursor');
-    if(cur) {
-        cur.style.left = e.clientX + 'px'; 
-        cur.style.top = e.clientY + 'px';
-    }
+    if(cur) { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; }
     document.documentElement.style.setProperty('--mx', (e.clientX/window.innerWidth)*100 + "%");
     document.documentElement.style.setProperty('--my', (e.clientY/window.innerHeight)*100 + "%");
-    
-    // Tilt Efek yang diperbaiki agar tetap di tengah
     const x = e.clientX - window.innerWidth/2;
     const y = e.clientY - window.innerHeight/2;
     const box = document.querySelector('.box');
-    if(box) {
-        box.style.transform = `rotateX(${-y/70}deg) rotateY(${x/70}deg)`;
-    }
+    if(box) box.style.transform = `rotateX(${-y/70}deg) rotateY(${x/70}deg)`;
 });
 
-// LOGIC MODE
 if(!params.get("v")){
     app.innerHTML = `
         <i class="fas fa-link" style="color:var(--yellow); font-size:40px; margin-bottom:15px;"></i>
         <h2>Link Generator</h2>
         <span class="instruction">Masukkan link file tujuan saja. Link sosial media akan ditambahkan otomatis.</span>
         <input id="target" placeholder="Tempel Link Mediafire / Drive...">
-        <button class="btn-primary" onclick="generate()">
-            <i class="fas fa-bolt"></i> BUAT LINK PENDEK
-        </button>
+        <button class="btn-primary" onclick="generate()">BUAT LINK PENDEK</button>
         <div id="result-box" style="display:none; margin-top:15px; border:1px dashed var(--yellow); padding:10px; border-radius:10px;"></div>
     `;
 
     window.generate = function(){
         const val = document.getElementById("target").value.trim();
-        if(!val) return alert("Tempel linknya dulu!");
+        if(!val) return alert("Tempel linknya!");
         const id = btoa(unescape(encodeURIComponent(val))).substring(0, 8);
         localStorage.setItem('dn_'+id, val);
         const finalLink = window.location.origin + window.location.pathname + "?v=" + id;
         const res = document.getElementById("result-box");
         res.style.display = "block";
-        res.innerHTML = `<p style="font-size:12px; color:var(--yellow); margin:5px 0;">Berhasil! Klik kotak bawah untuk salin:</p>
-        <input readonly value="${finalLink}" onclick="this.select(); document.execCommand('copy'); alert('Tersalin!');" style="cursor:pointer; margin-bottom:0;">`;
+        res.innerHTML = `<p style="font-size:12px; color:var(--yellow)">Berhasil! Salin link ini:</p>
+        <input readonly value="${finalLink}" onclick="this.select(); document.execCommand('copy'); alert('Tersalin!');">`;
     };
 } else {
     const key = params.get("v");
@@ -215,10 +196,10 @@ if(!params.get("v")){
             window.open(s.l, "_blank");
             if(!b.classList.contains("btn-done")){
                 b.classList.add("btn-done");
-                b.innerHTML = `<i class="fas fa-check-circle"></i> Selesai`;
+                b.innerHTML = `✅ Selesai`;
                 doneCount++;
                 if(doneCount >= mySocials.length) {
-                    document.getElementById('finalBtn').innerHTML = `<button class="btn-primary" style="background:#22c55e; color:#fff; margin-top:20px;" onclick="window.location.href='${targetLink}'"><i class="fas fa-download"></i> BUKA LINK TUJUAN</button>`;
+                    document.getElementById('finalBtn').innerHTML = `<button class="btn-primary" style="background:#22c55e; color:#fff; margin-top:20px;" onclick="window.location.href='${targetLink}'">BUKA LINK TUJUAN</button>`;
                 }
             }
         };

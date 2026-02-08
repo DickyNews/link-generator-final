@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dicky News | Premium Unlock</title>
+    <title>Dicky News | Premium Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <style>
@@ -15,20 +15,28 @@
             --text: #e2e8f0;
         }
 
-        /* PERBAIKAN: Memastikan body menjadi pembungkus yang sempurna di tengah */
         * { box-sizing: border-box; cursor: none; }
         
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             background-color: var(--bg);
             color: var(--text);
-            margin: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden; /* Mencegah scrollbar muncul akibat animasi */
+        }
+
+        /* Pembungkus Utama agar PASTI DI TENGAH */
+        .main-container {
             display: flex;
-            align-items: center; /* Vertikal center */
-            justify-content: center; /* Horisontal center */
-            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
             width: 100vw;
-            overflow-x: hidden;
+            height: 100vh;
+            position: relative;
+            perspective: 1000px; /* Penting untuk efek 3D */
         }
 
         #cursor {
@@ -40,7 +48,7 @@
             z-index: 9999;
             mix-blend-mode: difference;
             transition: transform 0.1s ease;
-            transform: translate(-50%, -50%); /* Agar kursor tepat di ujung telunjuk */
+            transform: translate(-50%, -50%);
         }
 
         .bg-glow {
@@ -50,9 +58,8 @@
             z-index: -1;
         }
 
-        /* PERBAIKAN: Penyesuaian Box agar tidak lari ke kiri */
         .box {
-            max-width: 500px;
+            max-width: 480px;
             width: 90%;
             background: var(--card);
             padding: 40px;
@@ -60,15 +67,13 @@
             border: 1px solid #222;
             text-align: center;
             box-shadow: 0 25px 50px rgba(0,0,0,0.7);
-            position: relative;
-            /* Hapus margin manual agar flexbox body yang bekerja */
-            margin: auto; 
-            transition: transform 0.1s ease-out;
-            z-index: 10;
+            /* Memastikan titik rotasi ada di tengah kotak */
+            transform-style: preserve-3d;
+            will-change: transform;
         }
 
         h2 {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 900;
             margin-bottom: 10px;
             background: linear-gradient(to bottom, #fff, var(--yellow));
@@ -86,7 +91,7 @@
         input {
             width: 100%;
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-radius: 14px;
             border: 1px solid #333;
             background: #0a0a0b;
@@ -97,28 +102,28 @@
 
         button {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
             border: none;
             border-radius: 16px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .btn-primary { background: var(--yellow); color: #000; text-transform: uppercase; }
-        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--yellow-glow); }
+        .btn-primary:hover { transform: scale(1.03); box-shadow: 0 0 20px var(--yellow-glow); }
 
         .btn-task { background: #1a1a1d; color: #fff; border: 1px solid #333; }
-        .btn-task:hover { border-color: var(--yellow); background: #222; transform: translateY(-3px); }
-        .btn-done { opacity: 0.3; background: #000 !important; border-color: #222 !important; color: #666 !important; }
+        .btn-task:hover { border-color: var(--yellow); background: #222; transform: translateY(-2px); }
+        .btn-done { opacity: 0.3; background: #000 !important; border-color: #222 !important; color: #666 !important; cursor: not-allowed; }
 
         #result-box {
-            margin-top: 25px;
+            margin-top: 20px;
             padding: 15px;
             background: rgba(255, 204, 0, 0.05);
             border: 1px dashed var(--yellow);
@@ -126,7 +131,11 @@
             display: none;
         }
 
-        @media (max-width: 600px) { #cursor { display: none; } * { cursor: auto !important; } }
+        @media (max-width: 600px) { 
+            #cursor { display: none; } 
+            * { cursor: auto !important; }
+            .box { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -134,7 +143,10 @@
 <div id="cursor"></div>
 <div class="bg-glow"></div>
 
-<div class="box" id="app" data-aos="zoom-in"></div>
+<div class="main-container">
+    <div class="box" id="app" data-aos="zoom-in">
+        </div>
+</div>
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
@@ -147,10 +159,11 @@ const mySocials = [
     { n: "Follow Facebook", i: "fab fa-facebook", l: "https://www.facebook.com/dickynews45" }
 ];
 
-AOS.init({ duration: 1000 });
+AOS.init({ duration: 800, once: true });
 const params = new URLSearchParams(window.location.search);
 const app = document.getElementById("app");
 
+// Mouse Tracking Logic
 document.addEventListener('mousemove', e => {
     const cur = document.getElementById('cursor');
     if(cur) {
@@ -160,13 +173,16 @@ document.addEventListener('mousemove', e => {
     document.documentElement.style.setProperty('--mx', (e.clientX/window.innerWidth)*100 + "%");
     document.documentElement.style.setProperty('--my', (e.clientY/window.innerHeight)*100 + "%");
     
-    // 3D Tilt Effect
+    // Perbaikan Titik Rotasi 3D (Tetap Center)
     const x = e.clientX - window.innerWidth/2;
     const y = e.clientY - window.innerHeight/2;
     const box = document.querySelector('.box');
-    if(box) box.style.transform = `perspective(1000px) rotateX(${-y/80}deg) rotateY(${x/80}deg)`;
+    if(box) {
+        box.style.transform = `rotateX(${-y/60}deg) rotateY(${x/60}deg)`;
+    }
 });
 
+// ROUTING: GENERATOR VS UNLOCK
 if(!params.get("v")){
     app.innerHTML = `
         <i class="fas fa-link" style="color:var(--yellow); font-size:40px; margin-bottom:15px;"></i>
@@ -196,10 +212,11 @@ if(!params.get("v")){
         <i class="fas fa-lock" style="color:var(--yellow); font-size:40px; margin-bottom:15px;"></i>
         <h2>Unlock Your Link</h2>
         <span class="instruction">Selesaikan langkah di bawah untuk membuka link 👇</span>
-        <div id="taskList"></div>
+        <div id="task-list"></div>
         <div id="finalBtn"></div>
     `;
     let doneCount = 0;
+    const taskList = document.getElementById('task-list');
     mySocials.forEach(s => {
         let b = document.createElement("button");
         b.className = "btn-task";
@@ -215,7 +232,7 @@ if(!params.get("v")){
                 }
             }
         };
-        document.getElementById("taskList").appendChild(b);
+        taskList.appendChild(b);
     });
 }
 </script>

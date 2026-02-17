@@ -11,14 +11,14 @@
             --bg: #020202;
             --glass: rgba(15, 15, 15, 0.85);
             --yellow: #ffcc00;
-            --yellow-glow: rgba(255, 204, 0, 0.15);
+            --yellow-glow: rgba(255, 204, 0, 0.2);
             --border-color: rgba(255, 255, 255, 0.08);
             --text: #ffffff;
         }
 
+        /* Reset & Base */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* Cursor hanya muncul di PC */
         @media (min-width: 1024px) {
             * { cursor: none; }
             #cursor {
@@ -42,24 +42,24 @@
             opacity: 0.1; z-index: 1; border-radius: 50%;
         }
 
-        .wrapper { width: 92%; max-width: 400px; z-index: 100; }
+        .wrapper { width: 92%; max-width: 420px; z-index: 100; }
 
+        /* Card Utama dengan Efek Glass iOS */
         .box {
             background: var(--glass);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             padding: 35px 20px;
-            border-radius: 30px;
+            border-radius: 35px;
             border: 1px solid var(--border-color);
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
         }
 
         .lock-icon {
-            font-size: 45px; color: var(--yellow);
+            font-size: 50px; color: var(--yellow);
             filter: drop-shadow(0 0 15px var(--yellow-glow));
             margin-bottom: 15px;
-            display: inline-block;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -68,10 +68,10 @@
             50% { transform: translateY(-10px); }
         }
 
-        h2 { font-size: 20px; font-weight: 900; margin: 0; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; }
-        .sub-text { color: #777; font-size: 12px; margin-top: 8px; margin-bottom: 25px; display: block; }
+        h2 { font-size: 22px; font-weight: 900; margin: 0; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; }
+        .sub-text { color: #888; font-size: 13px; margin-top: 8px; margin-bottom: 25px; display: block; }
 
-        /* Container Tugas dengan Garis Pembatas */
+        /* Container List dengan Garis Pembatas */
         .task-list {
             display: flex; flex-direction: column;
             border: 1px solid var(--border-color);
@@ -80,56 +80,60 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
+        /* Item Langkah-langkah */
         .task-item {
-            width: 100%; padding: 18px 15px;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--border-color); /* Garis pembatas horizontal */
+            width: 100%; padding: 20px 18px;
+            background: transparent; border: none;
+            border-bottom: 1px solid var(--border-color); /* Pembatas Horizontal */
             display: flex; align-items: center;
-            gap: 15px; color: #ccc;
+            gap: 15px; color: #ddd;
             font-size: 14px; font-weight: 600;
             transition: 0.3s;
             position: relative;
             text-align: left;
+            cursor: pointer;
         }
 
-        /* Garis pembeda vertikal (Aksen Kiri) */
+        /* Aksen Garis Kuning di Samping (Pembeda Visual) */
         .task-item::before {
-            content: ""; position: absolute; left: 0; top: 20%; bottom: 20%;
+            content: ""; position: absolute; left: 0; top: 25%; bottom: 25%;
             width: 3px; background: var(--yellow);
             border-radius: 0 4px 4px 0;
-            opacity: 0.3; transition: 0.3s;
+            opacity: 0.2; transition: 0.3s;
         }
 
         .task-item:last-child { border-bottom: none; }
 
-        .task-item i { width: 20px; text-align: center; font-size: 16px; color: #999; }
+        .task-item i { width: 25px; text-align: center; font-size: 18px; color: var(--yellow); }
 
-        /* Hover & Active State */
-        .task-item:active, .task-item:hover {
-            background: rgba(255, 204, 0, 0.05);
-            color: #fff;
-        }
+        /* Hover & Active */
+        .task-item:active, .task-item:hover { background: rgba(255, 204, 0, 0.05); color: #fff; }
         .task-item:active::before { opacity: 1; height: 60%; top: 20%; }
 
-        /* Status Berhasil */
-        .task-item.is-done {
+        /* Tombol Selesai */
+        .is-done {
             background: var(--yellow) !important;
             color: #000 !important;
-            border-bottom-color: rgba(0,0,0,0.1);
+            border-bottom-color: rgba(0,0,0,0.1) !important;
         }
-        .task-item.is-done i { color: #000 !important; }
-        .task-item.is-done::before { display: none; }
+        .is-done i { color: #000 !important; }
+        .is-done::before { display: none; }
 
-        .task-item:disabled { opacity: 0.8; }
-
-        /* Tombol Download */
+        /* Tombol Final Download */
         .btn-download {
             width: 100%; padding: 18px; border-radius: 20px;
-            margin-top: 20px; border: none; font-weight: 900;
+            margin-top: 25px; border: none; font-weight: 900;
             background: var(--yellow); color: #000;
-            box-shadow: 0 10px 25px rgba(255, 204, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3);
             font-size: 15px; text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        input {
+            width: 100%; padding: 16px; border-radius: 15px;
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.4); color: #fff;
+            text-align: center; margin-bottom: 15px; outline: none;
         }
 
         #cursor { display: none; }
@@ -142,54 +146,50 @@
 <div id="cursor"></div>
 
 <div class="wrapper">
-    <div class="box" id="app" data-aos="zoom-in">
-        </div>
+    <div class="box" id="app" data-aos="zoom-in"></div>
 </div>
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
+// DAFTAR SOSMED LENGKAP (Termasuk Facebook)
 const mySocials = [
     { n: "Subscribe YouTube Utama", i: "fab fa-youtube", l: "https://youtube.com/@dickynews" },
     { n: "Subscribe YouTube Kedua", i: "fab fa-youtube", l: "https://youtube.com/@dickynewsofficial" },
     { n: "Like & Komen Video", i: "fas fa-heart", l: "https://youtu.be/pn-l2l36qEE" },
     { n: "Follow Instagram", i: "fab fa-instagram", l: "https://www.instagram.com/dickynews" },
-    { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt" }
+    { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt" },
+    { n: "Follow Facebook", i: "fab fa-facebook", l: "https://www.facebook.com/dickynews45" }
 ];
 
 AOS.init({ duration: 800 });
 const params = new URLSearchParams(window.location.search);
 const app = document.getElementById("app");
 
-// Mouse Interaction
 document.addEventListener('mousemove', e => {
     const cur = document.getElementById('cursor');
-    if(cur) {
-        cur.style.left = e.clientX + 'px';
-        cur.style.top = e.clientY + 'px';
-    }
+    if(cur) { cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px'; }
 });
 
 if(!params.get("v")){
     app.innerHTML = `
         <i class="fas fa-bolt lock-icon"></i>
         <h2>LINK MAKER</h2>
-        <span class="sub-text">Bikin link premium dalam sekejap</span>
-        <input id="inp" placeholder="Link Mediafire / Google Drive" style="width:100%; padding:16px; border-radius:15px; border:1px solid var(--border-color); background:rgba(0,0,0,0.3); color:#fff; text-align:center; margin-bottom:15px; outline:none;">
-        <button class="btn-download" onclick="buat()">Generate Link</button>
+        <span class="sub-text">Bikin link premium dengan sistem verifikasi</span>
+        <input id="inp" placeholder="Masukkan Link Tujuan">
+        <button class="btn-download" onclick="buat()">Dapatkan Link Share</button>
         <div id="res"></div>
     `;
 
     window.buat = function(){
         const val = document.getElementById("inp").value.trim();
-        if(!val) return alert("Masukkan link!");
+        if(!val) return alert("Isi link dulu!");
         const encoded = btoa(val).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
         const finalUrl = window.location.origin + window.location.pathname + "?v=" + encoded;
         document.getElementById("res").innerHTML = `
-            <div style="margin-top:20px; border-top: 1px solid var(--border-color); padding-top:15px;">
-                <p style="font-size:10px; color:var(--yellow); margin-bottom:8px;">HASIL ENKRIPSI:</p>
-                <input readonly value="${finalUrl}" onclick="this.select(); document.execCommand('copy'); alert('Link Tersalin!');" style="background:rgba(255,255,255,0.05); color:var(--yellow); border:1px solid var(--yellow); width:100%; padding:12px; border-radius:12px; font-size:11px; text-align:center;">
-            </div>
-        `;
+            <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:15px;">
+                <p style="font-size:10px; color:var(--yellow); margin-bottom:10px;">SALIN & SEBARKAN:</p>
+                <input readonly value="${finalUrl}" onclick="this.select(); document.execCommand('copy'); alert('Disalin!');" style="border:1px solid var(--yellow); color:var(--yellow); font-size:11px;">
+            </div>`;
     };
 } else {
     let target;
@@ -201,7 +201,7 @@ if(!params.get("v")){
     app.innerHTML = `
         <i class="fas fa-unlock-alt lock-icon"></i>
         <h2>UNLOCK LINK</h2>
-        <span class="sub-text">Selesaikan langkah-langkah di bawah</span>
+        <span class="sub-text">Wajib selesaikan semua langkah berikut:</span>
         <div class="task-list" id="tasks"></div>
         <div id="final"></div>
     `;
@@ -221,19 +221,19 @@ if(!params.get("v")){
             let act = s.n.split(' ')[0];
 
             const timer = setInterval(() => {
-                b.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> <span>Mengecek... ${time}s</span>`;
+                b.innerHTML = `<i class="fas fa-spinner fa-spin"></i> <span>Mengecek... ${time}s (Sudah ${act}?)</span>`;
                 time--;
 
                 if(time < 0) {
                     clearInterval(timer);
                     b.disabled = false;
                     b.classList.add("is-done");
-                    b.innerHTML = `<i class="fas fa-check-circle"></i> <span>Langkah Selesai!</span>`;
+                    b.innerHTML = `<i class="fas fa-check-circle"></i> <span>Langkah Selesai</span>`;
                     done++;
                     if(done >= mySocials.length) {
                         document.getElementById('final').innerHTML = `
                             <button class="btn-download" onclick="window.location.href='${target}'">
-                                <i class="fas fa-cloud-download-alt"></i> Download File
+                                <i class="fas fa-cloud-download-alt"></i> DOWNLOAD FILE SEKARANG
                             </button>`;
                     }
                 }

@@ -35,7 +35,6 @@
             background: radial-gradient(circle at 50% 50%, #1a1a00 0%, #000 90%);
         }
 
-        /* Ambient Light */
         .ambient-glow {
             position: absolute; width: 400px; height: 400px;
             background: var(--yellow); filter: blur(150px);
@@ -50,7 +49,6 @@
             perspective: 1200px; 
         }
 
-        /* Main Card */
         .box {
             background: var(--glass);
             backdrop-filter: blur(25px);
@@ -80,7 +78,6 @@
         h2 { font-size: 18px; font-weight: 900; margin: 0; color: var(--yellow); letter-spacing: 2px; text-transform: uppercase; }
         .sub-text { color: #aaa; font-size: 11px; margin-top: 8px; margin-bottom: 25px; display: block; letter-spacing: 0.5px; }
 
-        /* Task List Style */
         .task-list {
             display: flex; flex-direction: column;
             border: 1px solid var(--border-color);
@@ -113,7 +110,6 @@
         .task-item:hover::before { opacity: 1; }
         .task-item i { width: 22px; text-align: center; font-size: 16px; color: var(--yellow); }
 
-        /* States (Checking, Error, Done) */
         .is-checking { background: rgba(255, 204, 0, 0.15) !important; cursor: wait; }
         .is-error { background: rgba(255, 68, 68, 0.1) !important; color: var(--error) !important; animation: shake 0.4s ease; }
         .is-done { background: var(--yellow) !important; color: #000 !important; font-weight: 800; }
@@ -159,11 +155,10 @@
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
-// DAFTAR TUGAS DENGAN LINK BARU
+// DAFTAR TUGAS - (HANYA 5 TUGAS, LIKE & KOMEN TELAH DIHAPUS)
 const mySocials = [
     { n: "Subscribe YouTube Utama", i: "fab fa-youtube", l: "https://youtube.com/@dickynews" },
     { n: "Subscribe YouTube Kedua", i: "fab fa-youtube", l: "https://www.youtube.com/@GODickyNews" },
-    { n: "Like & Komen Video", i: "fas fa-heart", l: "https://youtu.be/pn-l2l36qEE" },
     { n: "Follow Instagram", i: "fab fa-instagram", l: "https://www.instagram.com/dickynews" },
     { n: "Follow TikTok", i: "fab fa-tiktok", l: "https://www.tiktok.com/@dickynewsyt" },
     { n: "Follow Facebook", i: "fab fa-facebook", l: "https://www.facebook.com/dickynews45" }
@@ -175,7 +170,7 @@ const app = document.getElementById("app");
 const cursor = document.getElementById("cursor");
 const ambient = document.getElementById("ambient");
 
-// Efek Mouse
+// Efek Gerakan Mouse
 document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
@@ -192,7 +187,7 @@ function handleTilt(e) {
 function resetTilt() { app.style.transform = `rotateY(0deg) rotateX(0deg)`; }
 
 if(!params.get("v")){
-    // MODE PEMBUAT LINK (GENERATOR)
+    // MODE GENERATOR
     app.innerHTML = `
         <i class="fas fa-bolt lock-icon"></i>
         <h2>LINK GENERATOR</h2>
@@ -215,7 +210,7 @@ if(!params.get("v")){
             </div>`;
     };
 } else {
-    // MODE PENGUNJUNG (UNLOCKER)
+    // MODE UNLOCKER
     let target;
     try {
         let b64 = params.get("v").replace(/-/g, '+').replace(/_/g, '/');

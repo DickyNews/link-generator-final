@@ -19,6 +19,7 @@
             --text: #ffffff;
             --error: #ff4444;
             --success: #2ecc71;
+            --locked: rgba(255, 255, 255, 0.05);
         }
 
         * { 
@@ -98,6 +99,14 @@
             text-align: left; cursor: pointer;
         }
 
+        /* Gaya untuk state terkunci */
+        .task-item.is-locked {
+            opacity: 0.3;
+            cursor: not-allowed;
+            filter: grayscale(1);
+            background: var(--locked);
+        }
+
         .task-item:last-child { border-bottom: none; }
 
         .task-item::before {
@@ -106,8 +115,8 @@
             opacity: 0; transition: 0.3s;
         }
 
-        .task-item:hover { background: rgba(255, 204, 0, 0.08); color: #fff; }
-        .task-item:hover::before { opacity: 1; }
+        .task-item:not(.is-locked):hover { background: rgba(255, 204, 0, 0.08); color: #fff; }
+        .task-item:not(.is-locked):hover::before { opacity: 1; }
         .task-item i { width: 22px; text-align: center; font-size: 16px; color: var(--yellow); }
 
         .is-checking { background: rgba(255, 204, 0, 0.15) !important; cursor: wait; }
@@ -155,7 +164,6 @@
 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
-// DAFTAR TUGAS - (HANYA 5 TUGAS, LIKE & KOMEN TELAH DIHAPUS)
 const mySocials = [
     { n: "Subscribe YouTube Utama", i: "fab fa-youtube", l: "https://youtube.com/@dickynews" },
     { n: "Subscribe YouTube Kedua", i: "fab fa-youtube", l: "https://www.youtube.com/@GODickyNews" },
@@ -170,7 +178,6 @@ const app = document.getElementById("app");
 const cursor = document.getElementById("cursor");
 const ambient = document.getElementById("ambient");
 
-// Efek Gerakan Mouse
 document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
@@ -187,7 +194,6 @@ function handleTilt(e) {
 function resetTilt() { app.style.transform = `rotateY(0deg) rotateX(0deg)`; }
 
 if(!params.get("v")){
-    // MODE GENERATOR
     app.innerHTML = `
         <i class="fas fa-bolt lock-icon"></i>
         <h2>LINK GENERATOR</h2>
@@ -210,7 +216,6 @@ if(!params.get("v")){
             </div>`;
     };
 } else {
-    // MODE UNLOCKER
     let target;
     try {
         let b64 = params.get("v").replace(/-/g, '+').replace(/_/g, '/');
@@ -220,25 +225,35 @@ if(!params.get("v")){
     app.innerHTML = `
         <i class="fas fa-shield-alt lock-icon"></i>
         <h2>VERIFIKASI GANDA</h2>
-        <span class="sub-text">Selesaikan langkah eksklusif di bawah</span>
+        <span class="sub-text">Selesaikan langkah satu per satu untuk membuka link</span>
         <div class="task-list" id="tasks"></div>
         <div id="info-box" class="info-msg">
-            <i class="fas fa-info-circle"></i> Selesaikan semua misi di atas.<br>Tombol download otomatis muncul setelah selesai.
+            <i class="fas fa-info-circle"></i> Selesaikan misi yang aktif.<br>Misi berikutnya akan terbuka otomatis.
         </div>
         <div id="final"></div>
     `;
 
-    let done = 0;
+    let doneCount = 0;
+    const taskButtons = [];
+
     mySocials.forEach((s, idx) => {
         let b = document.createElement("button");
         b.className = "task-item";
+        // Langkah pertama langsung aktif, sisanya terkunci
+        if(idx > 0) b.classList.add("is-locked");
+        
         b.setAttribute("data-aos", "fade-up");
         b.setAttribute("data-aos-delay", idx * 50);
-        b.innerHTML = `<i class="${s.i}"></i> <span>${s.n}</span>`;
+        
+        // Tambahkan icon gembok untuk langkah yang terkunci
+        const lockHtml = idx > 0 ? `<i class="fas fa-lock" style="font-size:10px; margin-left:auto; opacity:0.5;"></i>` : "";
+        b.innerHTML = `<i class="${s.i}"></i> <span>${s.n}</span> ${lockHtml}`;
         b.dataset.attempts = "0";
+        taskButtons.push(b);
 
         b.onclick = () => {
-            if(b.classList.contains("is-done") || b.disabled) return;
+            // Cek apakah tombol sedang terkunci, sudah selesai, atau sedang proses
+            if(b.classList.contains("is-locked") || b.classList.contains("is-done") || b.disabled) return;
             
             window.open(s.l, "_blank");
             b.disabled = true;
@@ -263,8 +278,18 @@ if(!params.get("v")){
                     } else {
                         b.classList.add("is-done");
                         b.innerHTML = `<i class="fas fa-check-circle"></i> <span>${s.n} BERHASIL</span>`;
-                        done++;
-                        if(done >= mySocials.length) {
+                        doneCount++;
+
+                        // BUKA LANGKAH BERIKUTNYA
+                        if(idx + 1 < mySocials.length) {
+                            const nextBtn = taskButtons[idx + 1];
+                            nextBtn.classList.remove("is-locked");
+                            // Update icon dari gembok kembali ke normal
+                            nextBtn.innerHTML = `<i class="${mySocials[idx+1].i}"></i> <span>${mySocials[idx+1].n}</span>`;
+                        }
+
+                        // JIKA SEMUA SELESAI
+                        if(doneCount >= mySocials.length) {
                             document.getElementById('info-box').style.display = 'none';
                             document.getElementById('final').innerHTML = `
                                 <button class="btn-download" onclick="window.location.href='${target}'">

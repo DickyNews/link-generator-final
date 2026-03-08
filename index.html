@@ -18,7 +18,6 @@
             cursor: pointer; width: 100%; font-weight: 600; opacity: 0.5; pointer-events: none; transition: 0.3s;
         }
         .task-item.is-active { opacity: 1; pointer-events: auto; border: 2px solid var(--yellow); }
-        /* Warna hijau saat berhasil */
         .task-item.is-done { opacity: 1; background: var(--green); border: none; color: #fff; }
         
         @keyframes pulse {
@@ -87,7 +86,7 @@
                             if(!b.dataset.fail) {
                                 b.dataset.fail = "true";
                                 b.classList.add("is-error");
-                                b.innerHTML = `Kamu belum ${s.action} :( Silahkan klik ulang untuk ${s.action}.`;
+                                b.innerHTML = `Kamu belum ${s.action} :( Silahkan klik tombol ini untuk ${s.action}.`;
                                 b.disabled = false;
                             } else {
                                 b.classList.remove("is-active", "is-error");

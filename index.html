@@ -49,7 +49,6 @@
         h2 { font-weight: 700; margin: 0 0 15px 0; font-size: 26px; }
         .desc { font-size: 14px; color: #3a3a3c; margin-bottom: 30px; line-height: 1.5; }
 
-        /* Animasi Denyut untuk Tab Aktif */
         @keyframes pulse-active {
             0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 122, 255, 0.1); }
             50% { transform: scale(1.03); box-shadow: 0 10px 25px rgba(0, 122, 255, 0.2); }
@@ -132,6 +131,7 @@
 </div>
 
 <script>
+    // --- ANIMASI BACKGROUND ASLI ---
     const canvas = document.getElementById('constellationCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -167,6 +167,7 @@
     }
     animate();
 
+    // --- DATA SOSIAL MEDIA ASLI ---
     const mySocials = [
         { n: "Subscribe YouTube Utama", i: "fab fa-youtube yt", link: "https://youtube.com/@dickynews", verb: "subscribe" },
         { n: "Subscribe YouTube Kedua", i: "fab fa-youtube yt", link: "https://www.youtube.com/@GODickyNews", verb: "subscribe" },
@@ -179,11 +180,27 @@
     const app = document.getElementById("app");
 
     function renderUI() {
-        if(!params.get("v")) {
+        const encryptedUrl = params.get("v");
+        const method = params.get("method");
+
+        if(!encryptedUrl) {
+            // GENERATOR MODE
             app.innerHTML = `<h2>LINK GENERATOR</h2><p class="desc">Tempel URL tujuan untuk membuat link unlocker.</p><input id="link" style="width:100%; padding:18px; border-radius:15px; border:1.5px solid #d1d1d6; margin-bottom:15px; box-sizing:border-box;" placeholder="Paste URL Tujuan..."> <button class="btn-main" style="display:block; background:#1c1c1e" onclick="generate()">Generate Link</button><div id="res"></div>`;
-        } else {
-            app.innerHTML = `<h2>VERIFIKASI</h2><p class="desc">Selesaikan langkah-langkah di bawah ini untuk membuka link WhatsApp Mod.</p><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob(params.get('v'))">AKSES LINK TUJUAN</button>`;
+        } 
+        else if (method === "bypass") {
+            // BYPASS MODE (PASSWORD BENAR DI WEB 3)
+            app.innerHTML = `
+                <i class="fas fa-check-circle" style="font-size:60px; color:var(--green); margin-bottom:20px;"></i>
+                <h2>AKSES TERBUKA</h2>
+                <p class="desc">Verifikasi dilewati. Silahkan ambil link download Anda di bawah ini.</p>
+                <button class="btn-main" style="display:block;" onclick="window.location.href=atob('${encryptedUrl}')">AKSES LINK TUJUAN</button>
+            `;
+        }
+        else {
+            // TASK MODE (JALUR GRATIS / TANPA PIN)
+            app.innerHTML = `<h2>VERIFIKASI</h2><p class="desc">Selesaikan langkah-langkah di bawah ini untuk membuka link WhatsApp Mod.</p><div id="tasks"></div><button id="finalLink" class="btn-main" onclick="window.location.href=atob('${encryptedUrl}')">AKSES LINK TUJUAN</button>`;
             const tasksContainer = document.getElementById("tasks");
+            
             mySocials.forEach((s, idx) => {
                 let b = document.createElement("button");
                 b.className = "task-item";
@@ -203,7 +220,7 @@
                             b.disabled = false;
                             if(parseInt(b.dataset.attempt) === 1) {
                                 b.classList.add("is-error");
-                                b.innerHTML = `<div class="task-content"><i class="fas fa-exclamation-circle"></i><span>Sistem gagal memverifikasi :( klik tombol ini lagi dan pastikan kamu sudah ${s.verb} ${s.n.split(' ').slice(1).join(' ')}</span></div>`;
+                                b.innerHTML = `<div class="task-content"><i class="fas fa-exclamation-circle"></i><span>Sistem gagal memverifikasi :( Klik lagi dan pastikan kamu sudah ${s.verb}</span></div>`;
                                 b.dataset.attempt = "2";
                             } else {
                                 b.classList.remove("is-active", "is-error");
@@ -220,6 +237,7 @@
             });
         }
     }
+
     window.generate = () => { 
         let url = document.getElementById('link').value;
         if(url) {
@@ -227,6 +245,7 @@
             document.getElementById('res').innerHTML = `<div style="margin-top:20px; padding:15px; background:#fff; border-radius:15px; font-size:11px; word-break:break-all; text-align:left;"><strong>Link Anda:</strong><br>${final}</div>`;
         }
     };
+
     renderUI();
 </script>
 </body>
